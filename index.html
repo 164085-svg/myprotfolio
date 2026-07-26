@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saengyod — Portfolio for Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEE7D6;
+    --paper-dark:#E4DBC5;
+    --ink:#26221C;
+    --ink-soft:#5C564B;
+    --navy:#2E3A54;
+    --stamp:#A23C2C;
+    --sage:#6E7B58;
+    --gold:#B89860;
+    --line: rgba(38,34,28,0.18);
+    --radius: 2px;
+    --serif: 'Taviraj', serif;
+    --body: 'Sarabun', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(38,34,28,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+
+  ::selection{ background:var(--stamp); color:var(--paper); }
+
+  :focus-visible{
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  .wrap{ max-width:1040px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- Folder-tab navigation ---------- */
+  .site-nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .site-nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:14px; padding-bottom:0;
+    gap:16px;
+  }
+  .brand{
+    font-family:var(--mono); font-size:13px; letter-spacing:.08em;
+    color:var(--navy); text-decoration:none; font-weight:700;
+    white-space:nowrap;
+  }
+  .tabs{
+    display:flex; gap:2px; overflow-x:auto; scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tabs a{
+    font-family:var(--mono); font-size:12px; letter-spacing:.03em;
+    text-decoration:none; color:var(--ink-soft);
+    padding:10px 14px 12px;
+    border:1px solid var(--line); border-bottom:none;
+    border-radius:6px 6px 0 0;
+    background:var(--paper-dark);
+    white-space:nowrap;
+    transition:color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .tabs a:hover{ color:var(--navy); transform:translateY(-2px); }
+  .tabs a.active{ background:var(--paper); color:var(--stamp); font-weight:700; }
+
+  /* ---------- Stamp badge (signature element) ---------- */
+  .stamp-badge{
+    --r: -11deg;
+    position:absolute;
+    width:132px; height:132px;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(var(--r));
+    pointer-events:none;
+    filter:url(#roughen);
+    mix-blend-mode:multiply;
+  }
+  .stamp-badge svg{ width:100%; height:100%; }
+  .stamp-badge text{
+    fill:var(--stamp);
+    font-family:var(--mono);
+    font-weight:700;
+  }
+  .stamp-badge circle{
+    fill:none; stroke:var(--stamp); stroke-width:2.5;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:64px 0 96px;
+    position:relative;
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns:280px 1fr; gap:56px; align-items:start;
+  }
+  .hero-photo{
+    position:relative;
+  }
+  .hero-photo .frame{
+    position:relative;
+    background:#fff;
+    padding:10px 10px 34px;
+    box-shadow: 0 18px 30px -18px rgba(38,34,28,0.4), 0 2px 0 rgba(38,34,28,0.05);
+    transform:rotate(-2.5deg);
+    transition:transform .35s ease;
+  }
+  .hero-photo:hover .frame{ transform:rotate(-1deg) translateY(-2px); }
+  .hero-photo .frame img{
+    width:100%; aspect-ratio:3/4; object-fit:cover; filter:sepia(.08) contrast(1.02);
+  }
+  .hero-photo .frame figcaption{
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    text-align:center; padding-top:10px; letter-spacing:.04em;
+  }
+  .hero-photo .clip{
+    position:absolute; top:-16px; left:50%; transform:translateX(-50%) rotate(-4deg);
+    width:34px; height:56px; opacity:.85;
+  }
+  .hero-photo .pin-stamp{ top:-22px; right:-30px; }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+    color:var(--sage); text-transform:uppercase; margin:0 0 14px;
+  }
+  .eyebrow::before{ content:"// "; color:var(--line); }
+  .hero-copy h1{
+    font-family:var(--serif); font-weight:600;
+    font-size:clamp(2rem, 4vw, 3.1rem);
+    margin:0 0 6px; color:var(--ink); line-height:1.15;
+  }
+  .hero-copy .role{
+    font-family:var(--mono); font-size:13px; letter-spacing:.08em;
+    color:var(--navy); margin:0 0 26px;
+  }
+  .hero-copy p.lede{
+    max-width:52ch; color:var(--ink-soft); font-size:17px;
+  }
+  .hero-cta{ display:flex; gap:14px; margin-top:28px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.04em;
+    text-decoration:none; padding:12px 20px;
+    border:1px solid var(--ink); border-radius:2px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .btn.primary{ background:var(--navy); border-color:var(--navy); color:var(--paper); }
+  .btn.primary:hover{ background:var(--ink); border-color:var(--ink); }
+  .btn.ghost:hover{ background:var(--ink); color:var(--paper); }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:70px 0; border-top:1px dashed var(--line); position:relative; }
+  .section-head{
+    display:flex; align-items:baseline; gap:16px; margin-bottom:40px;
+    flex-wrap:wrap;
+  }
+  .file-tag{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.1em;
+    color:#fff; background:var(--navy); padding:4px 10px; border-radius:2px;
+  }
+  .section-head h2{
+    font-family:var(--serif); font-size:clamp(1.5rem,2.6vw,2.1rem);
+    margin:0; font-weight:600;
+  }
+  .section-note{
+    font-family:var(--mono); font-size:12px; color:var(--ink-soft);
+    margin-left:auto;
+  }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* ---------- About: index cards ---------- */
+  .card-row{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  @media (max-width:760px){ .card-row{ grid-template-columns:1fr; } }
+  .index-card{
+    background:var(--paper-dark);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 26px;
+    position:relative;
+  }
+  .index-card::before{
+    content:""; position:absolute; left:0; top:22px; bottom:22px; width:3px;
+    background:var(--gold);
+  }
+  .index-card .tag{
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    letter-spacing:.08em; margin-bottom:10px; display:block;
+  }
+  .index-card h3{ font-family:var(--serif); margin:0 0 16px; font-size:1.25rem; }
+  .field{ display:grid; grid-template-columns:120px 1fr; gap:8px; margin-bottom:10px; font-size:14.5px; }
+  .field .k{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); align-self:start; padding-top:2px;}
+  .field .v{ color:var(--ink); }
+  .placeholder{ color:var(--stamp); font-style:italic; }
+  .quote{
+    font-family:var(--serif); font-size:1.15rem; line-height:1.75;
+    color:var(--ink); position:relative; padding-left:6px;
+  }
+  .quote::before{ content:"“"; color:var(--gold); font-size:2rem; line-height:0; position:relative; top:14px; margin-right:2px; }
+  .signoff{
+    margin-top:18px; font-family:var(--mono); font-size:11.5px; color:var(--sage);
+  }
+
+  /* ---------- Education timeline ---------- */
+  .timeline{ position:relative; padding-left:36px; }
+  .timeline::before{
+    content:""; position:absolute; left:11px; top:6px; bottom:6px; width:1px;
+    background:var(--line);
+  }
+  .t-item{ position:relative; padding-bottom:36px; }
+  .t-item:last-child{ padding-bottom:0; }
+  .t-num{
+    position:absolute; left:-36px; top:0; width:24px; height:24px;
+    border:1px solid var(--navy); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:12px; color:var(--navy);
+    background:var(--paper);
+  }
+  .t-item .tag{ font-family:var(--mono); font-size:11px; color:var(--sage); letter-spacing:.08em; }
+  .t-item h3{ font-family:var(--serif); margin:6px 0 4px; font-size:1.2rem; }
+  .t-item p{ margin:0; color:var(--ink-soft); }
+
+  /* ---------- Portfolio gallery ---------- */
+  .gallery-note{
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);
+    margin-bottom:26px;
+  }
+  .gallery{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;
+  }
+  @media (max-width:760px){ .gallery{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .gallery{ grid-template-columns:1fr; } }
+  .plate{
+    background:var(--paper-dark); border:1px solid var(--line);
+    aspect-ratio:4/5; border-radius:2px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:16px;
+    transition:transform .2s ease, box-shadow .2s ease;
+    position:relative; overflow:hidden;
+  }
+  .plate:hover{ transform:translateY(-4px); box-shadow:0 16px 22px -18px rgba(38,34,28,0.5); }
+  .plate .plate-num{
+    position:absolute; top:10px; left:10px; font-family:var(--mono); font-size:10.5px; color:var(--ink-soft);
+  }
+  .plate .plate-label{ font-family:var(--mono); font-size:12px; color:var(--ink-soft); }
+  .plate img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(20,18,14,0.88);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:24px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-height:86vh; max-width:min(92vw,900px); box-shadow:0 20px 60px rgba(0,0,0,.5); }
+  .lightbox-close{
+    position:absolute; top:20px; right:26px; color:var(--paper);
+    font-family:var(--mono); font-size:13px; background:none; border:1px solid var(--paper);
+    padding:8px 14px; cursor:pointer; border-radius:2px;
+  }
+
+  /* ---------- Contact / footer ---------- */
+  .contact-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; max-width:520px; }
+  @media (max-width:520px){ .contact-grid{ grid-template-columns:1fr; } }
+  .contact-item{
+    border:1px solid var(--line); background:var(--paper-dark);
+    padding:18px 20px; border-radius:2px;
+  }
+  .contact-item .k{ font-family:var(--mono); font-size:11px; color:var(--sage); letter-spacing:.1em; }
+  .contact-item .v{ margin-top:6px; font-size:15px; }
+  footer{
+    padding:34px 0 60px; text-align:center;
+    font-family:var(--mono); font-size:11.5px; color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG filter used for the rough stamp-ink texture -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="roughen">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="4"/>
+  </filter>
+</svg>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="#home">SU · SAENGYOD</a>
+    <div class="tabs" id="tabs">
+      <a href="#home" data-tab>หน้าแรก</a>
+      <a href="#about" data-tab>ประวัติส่วนตัว</a>
+      <a href="#education" data-tab>ประวัติการศึกษา</a>
+      <a href="#portfolio" data-tab>แฟ้มผลงาน</a>
+      <a href="#contact" data-tab>ช่องทางติดต่อ</a>
+    </div>
+  </div>
+</nav>
+
+<header id="home" class="hero">
+  <div class="wrap">
+    <div class="hero-photo">
+      <svg class="clip" viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 4C6 1.8 7.8 0 10 0s4 1.8 4 4v26a6 6 0 0 1-12 0V10" stroke="#8a8f98" stroke-width="2.4"/>
+      </svg>
+      <figure class="frame">
+        <!-- Replace this src with your own photo, e.g. images/1.jpg -->
+        <img src="images/1.jpg" alt="รูปโปรไฟล์ของแสงยอด" onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect width=%22300%22 height=%22400%22 fill=%22%23ddd3ba%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-family=%22monospace%22 font-size=%2216%22 fill=%22%23847a5f%22 text-anchor=%22middle%22%3EPHOTO%3C/text%3E%3C/svg%3E'">
+        <figcaption>FILE NO. 2026 — SU_APPLICANT</figcaption>
+      </figure>
+      <div class="stamp-badge pin-stamp">
+        <svg viewBox="0 0 132 132">
+          <circle cx="66" cy="66" r="52"/>
+          <circle cx="66" cy="66" r="46"/>
+          <text x="66" y="52" font-size="12" text-anchor="middle" letter-spacing="1">SU RECRUIT</text>
+          <text x="66" y="72" font-size="18" text-anchor="middle" font-weight="700">2026</text>
+          <text x="66" y="88" font-size="9" text-anchor="middle" letter-spacing="2">APPLICANT FILE</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero-copy">
+      <p class="eyebrow">SU_RECRUIT_2026 · SILPAKORN UNIVERSITY ADMISSION</p>
+      <h1>นางสาวแสงยอด ตามูล</h1>
+      <p class="role">PORTFOLIO FOR EDUCATION</p>
+      <p class="lede">
+        ยินดีต้อนรับคณะกรรมการสู่แฟ้มสะสมผลงานของฉันค่ะ นี่คือพื้นที่รวบรวมประวัติการเรียนรู้
+        โครงงาน และกิจกรรมสร้างสรรค์ที่พัฒนาขึ้นด้วยความตั้งใจจริง เพื่อก้าวไปสู่การเป็นส่วนหนึ่ง
+        ของรั้วมหาวิทยาลัยศิลปากรค่ะ
+      </p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#portfolio">รับชมผลงานสะสม</a>
+        <a class="btn ghost" href="#about">เป้าหมาย</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="file-tag">STUDIO BIO-DATA</span>
+      <h2>ประวัติส่วนตัว</h2>
+      <span class="section-note">MEMBER RECORD // SU APPLICANT</span>
+    </div>
+
+    <div class="card-row">
+      <div class="index-card">
+        <span class="tag">ข้อมูลผู้สมัครเรียน</span>
+        <h3>ข้อมูลผู้สมัครเรียน</h3>
+        <div class="field"><span class="k">ชื่อ-นามสกุล</span><span class="v">นางสาวแสงยอด ตามูล</span></div>
+        <div class="field"><span class="k">โรงเรียน</span><span class="v">กระทุ่มแบน "วิเศษสมุทคุณ"</span></div>
+        <div class="field"><span class="k">แผนการเรียน</span><span class="v placeholder">[ ระบุแผนการเรียน ]</span></div>
+      </div>
+
+      <div class="index-card">
+        <span class="tag">TARGET MOTIVE</span>
+        <h3>เป้าหมายสูงสุดในการศึกษาต่อ</h3>
+        <p class="quote">
+          ฉันเชื่อว่าความรู้คือใบเบิกทางและโอกาสที่ไร้ขอบเขต การได้เข้าศึกษาต่อในสถาบันแห่งความ
+          ภาคภูมิใจอย่างมหาวิทยาลัยศิลปากร จะช่วยเปิดรับแรงบันดาลใจใหม่ ๆ ปลดล็อกทักษะเพื่อนำไป
+          ขับเคลื่อนอาชีพในฝันได้อย่างสมบูรณ์
+        </p>
+        <p class="signoff">EDUCATIONAL MINDSET BY SAENGYOD 🌱</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="file-tag">EDUCATION</span>
+      <h2>ประวัติการศึกษา</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="t-item">
+        <span class="t-num">1</span>
+        <span class="tag">MIDDLE SCHOOL</span>
+        <h3>ระดับมัธยมศึกษาตอนต้น</h3>
+        <p>โรงเรียนกระทุ่มแบน "วิเศษสมุทคุณ"</p>
+      </div>
+      <div class="t-item">
+        <span class="t-num">2</span>
+        <span class="tag">HIGH SCHOOL</span>
+        <h3>ระดับมัธยมศึกษาตอนปลาย</h3>
+        <p>โรงเรียนกระทุ่มแบน "วิเศษสมุทคุณ"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="file-tag">PORTFOLIO</span>
+      <h2>แฟ้มสะสมผลงาน</h2>
+    </div>
+    <p class="gallery-note">[ คลิกที่รูปภาพเพื่อตรวจสอบชิ้นงานความละเอียดสูง ]</p>
+
+    <div class="gallery" id="gallery">
+      <!-- Duplicate this .plate block for each artwork. Swap the <img src> for your own file. -->
+      <div class="plate" data-full="images/work-01.jpg">
+        <span class="plate-num">01</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+      <div class="plate" data-full="images/work-02.jpg">
+        <span class="plate-num">02</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+      <div class="plate" data-full="images/work-03.jpg">
+        <span class="plate-num">03</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+      <div class="plate" data-full="images/work-04.jpg">
+        <span class="plate-num">04</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+      <div class="plate" data-full="images/work-05.jpg">
+        <span class="plate-num">05</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+      <div class="plate" data-full="images/work-06.jpg">
+        <span class="plate-num">06</span>
+        <span class="plate-label">[ ชื่อผลงาน ]</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <span class="file-tag">CONNECTIONS</span>
+      <h2>ช่องทางการติดต่อ</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="k">FACEBOOK</div>
+        <div class="v placeholder">[ ระบุเฟซบุ๊ก ]</div>
+      </div>
+      <div class="contact-item">
+        <div class="k">INSTAGRAM</div>
+        <div class="v placeholder">[ ระบุไอจี ]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 SAENGYOD TAMUL. ALL RIGHTS RESERVED.</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">ปิด ✕</button>
+  <img id="lightboxImg" src="" alt="ผลงานขนาดเต็ม">
+</div>
+
+<script>
+  // Highlight the nav tab matching the section currently in view
+  const tabs = document.querySelectorAll('[data-tab]');
+  const sections = document.querySelectorAll('section, header');
+  const setActive = () => {
+    let current = sections[0].id;
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 80;
+      if (window.scrollY >= top) current = sec.id;
+    });
+    tabs.forEach(t => t.classList.toggle('active', t.getAttribute('href') === '#' + current));
+  };
+  document.addEventListener('scroll', setActive);
+  setActive();
+
+  // Fade sections in as they enter the viewport
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Portfolio lightbox: click a plate to view the full-size image
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('.plate').forEach(plate => {
+    plate.addEventListener('click', () => {
+      const src = plate.dataset.full;
+      lightboxImg.src = src;
+      lightboxImg.onerror = () => {
+        lightboxImg.src = 'data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22750%22%3E%3Crect width=%22600%22 height=%22750%22 fill=%22%23ddd3ba%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-family=%22monospace%22 font-size=%2222%22 fill=%22%23847a5f%22 text-anchor=%22middle%22%3Eเพิ\u0e48มรูปภาพผลงานที่นี่%3C/text%3E%3C/svg%3E';
+      };
+      lightbox.classList.add('open');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
